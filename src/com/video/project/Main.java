@@ -1,29 +1,31 @@
 package com.video.project;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
 
-	static ArrayList<User> userList = new ArrayList<User>();
-	static ArrayList<String> userArrayList = new ArrayList<String>();
-
 	public static Scanner scanner = new Scanner((System.in));
+	static ArrayList<Video> videoList = new ArrayList<Video>();
+	static ArrayList<User> userList = new ArrayList<User>();
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 
 		// Add Preload User
 
 		if (userList.size() == 0) {
-			userList.add(new User("admin", "test", "1234", LocalDate.now(), "admin.test"));
-			userArrayList.add(User.getUserName());
-			userList.add(new User("test", "admin", "1234", LocalDate.now(), "test.admin"));
-			userArrayList.add(User.getUserName());
+			try {
+				userList.add(new User("admin", "admin", "admin"));
+				userList.add(new User("test", "test", "test"));
+			} catch (Exception e) {
+				writeToLog(new Exception("Something wrong with preloaded user data"));
+				e.printStackTrace();
+			}
+
 		}
 
-		System.out.println("Welcome to Future Videos! What do you want to do?"
-				+ "\n 1 - Sign In. \n 2 - Sign Up. \n 3 - Show User List \n 4 - Exit.");
+		System.out.println(
+				"Welcome to Future Videos! What do you want to do?" + "\n 1 - Sign In. \n 2 - Sign Up. \n 3 - Exit.");
 
 		// Used to hold the instance of a user who successfully logged in
 		User loggedInUser = null;
@@ -37,12 +39,15 @@ public class Main {
 			// Sign In.
 			System.out.println("You chosed enter in your profile!");
 			// Iterate through list of users to see if we have a match
-			String askUserName = askUserName();
-			String askUserPassword = askUserPassword();
+
+			System.out.println("Please introduce your name without blank spaces.");
+			String askName = (scanner.next().toLowerCase());
+
+			System.out.println("Please introduce your Password.");
+			String askUserPassword = (scanner.next().toLowerCase());
 
 			for (User User : userList) {
-				if (com.video.project.User.getUserName() == (askUserName)
-						&& (com.video.project.User.getPswd() == (askUserPassword)))
+				if (User.getName().equals(askName) && (User.getPassword().equals(askUserPassword)))
 					;
 				{
 					loggedInUser = User;
@@ -51,7 +56,7 @@ public class Main {
 
 			// if loggedInUser was changed from null, it was successful
 			if (loggedInUser != null) {
-				System.out.println("User successfully logged in: " + User.getUserName());
+				System.out.println("User successfully logged in: " + askName);
 				Main.userConsole();
 			} else {
 				System.out.println("Invalid username/password combination! Please try again!");
@@ -63,109 +68,79 @@ public class Main {
 			// Sign Up.
 			System.out.println("You chosed create a new profile!");
 			User newUser = null;
-			newUser = new User(askName(), askSurname(), askPswd(), User.getDateOfSignUp(), User.getUserName());
 
-			userArrayList.add(User.getUserName());
+			System.out.println("Please introduce your name without blank spaces.");
+			String name = (scanner.next().toLowerCase());
+
+			System.out.println("Please introduce your surname without blank spaces.");
+			String surname = (scanner.next().toLowerCase());
+
+			System.out.println("Please introduce your Password.");
+			String password = (scanner.next().toLowerCase());
+
+			try {
+				newUser = new User(name, surname, password);
+			} catch (Exception e) {
+				writeToLog(new Exception("Something wrong with create a new user"));
+				e.printStackTrace();
+			}
 			userList.add(newUser);
-			System.out.println("The new User has been created! \n" + "User Name: " + User.getUserName() + "\nPassword: "
-					+ User.getPswd() + "\nDate of Sign Up: " + User.getDateOfSignUp());
+			System.out.println("The new User has been created!" + newUser.toString());
+
 			Main.main(args);
 			break;
 
 		case "3":
-			// Show the UserList.
-			System.out.println("The User List is:");
-			System.out.println(userArrayList);
-			Main.main(args);
-			break;
-
-		case "4":
 			// Exit.
 			System.out.println("Good  Bye! We hope to see you again soon!");
 			break;
 
 		default:
-			System.out.println("ERROR! Please choose a number between 1 and 4!");
+			System.out.println("ERROR! Please choose a number between 1 and 3!");
 			Main.main(args);
 		}
 
 	}
-	// Case 2 - Sign Up.
 
-	public static String askName() {
-		System.out.println("Please introduce your name without blank spaces.");
-		return (scanner.next().toLowerCase());
-	}
-
-	public static String askSurname() {
-		System.out.println("Please introduce your surname without blank spaces.");
-		return (scanner.next().toLowerCase());
-	}
-
-	public static String askPswd() {
-		System.out.println("Please introduce your Password.");
-		return (scanner.next());
-	}
-
-	// Case 1 - Sign In.
-	public static String askUserName() {
-		System.out.println("Please introduce your User Name.");
-		return (scanner.next());
-	}
-
-	public static String askUserPassword() {
-		System.out.println("Please introduce your Password.");
-		return (scanner.next());
-	}
-
-	// Sign in options.
-	public static String signInOption() {
-		// System.out.println("Please choose one of the options.");
-		return (scanner.next());
-	}
+	public static void writeToLog(Exception exception) {}
 
 	public static void userConsole() {
 
 		System.out.println("What do you want to do?" + "\n 1 - Create a new video. "
 				+ "\n 2 - See your list of videos. \n 3 - Exit.");
-		
+		String signInOption = (scanner.next());
+
 		// Switch Sign In Options.
-		ArrayList<String> videoArrayList = new ArrayList<String>();
-		
-		switch (signInOption()) {
+
+		switch (signInOption) {
 		case "1":
 			System.out.println("You chosed create a new video!");
-			Video newVideo = new Video(askVideoTitle(), Video.getUrl(), askVideoTags());
-			
-			User.videos.add(newVideo);
-			videoArrayList.add(Video.getUrl());
-			
-			System.out.println("The new Video has been created! \n" + "Title: " + Video.getTitle() + "\nURL: "
-					+ Video.getUrl() + "\nTag List: " + Video.getTags());
-			
+
+			System.out.println("Please introduce the title of your video without blank spaces.");
+			String title = (scanner.next().toLowerCase());
+
+			System.out.println("Please introduce the URL of the video without blank spaces.");
+			String URL = (scanner.next().toLowerCase());
+
+			System.out.println("Please introduce the tags separated by a comma without blank spaces.");
+			String tags = (scanner.next().toLowerCase());
+
+			Video newVideo = new Video(title, URL, tags);
+			videoList.add(newVideo);
+			System.out.println("The new Video has been created! \n" + newVideo.toString());
 			Main.userConsole();
 			break;
 		case "2":
 			System.out.println("Your videos are:");
-			System.out.println(User.videos.toString());
+			System.out.println(videoList.toString());
 			Main.userConsole();
 			break;
 		case "3":
-			System.out.println("Good Bye " + User.getUserName() + "! We hope to see you again soon!");
+			System.out.println("Good Bye! We hope to see you again soon!");
 			break;
 		default:
 			System.out.println("ERROR! Please choose a number between 1 and 3!");
 			Main.userConsole();
 		}
-	}
-
-	public static String askVideoTitle() {
-		System.out.println("Please introduce the title of your video without blank spaces.");
-		return (scanner.next().toLowerCase());
-	}
-
-	public static String askVideoTags() {
-		System.out.println("Please introduce the tags separated by a comma without blank spaces.");
-		return (scanner.next().toLowerCase());
 	}
 }

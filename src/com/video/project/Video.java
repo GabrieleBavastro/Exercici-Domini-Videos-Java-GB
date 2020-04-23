@@ -1,43 +1,57 @@
 package com.video.project;
 
 public class Video {
-	private static String url;
-	private static String title;
-	private static String tags;
 
-	public Video(String title, String url, String tags) {
+	private static int ID_COUNTER = 1; 
+		
+	int Id;
+	String Title;
+	String URL;
+	String tags;
+	
+	public Video(String title, String uRL, String tags) {
+		Id = ID_COUNTER;
+		ID_COUNTER++;
 		
 		this.setTitle(title);
-		this.setUrl("https://futurevideos.com/"+(title));
+		this.setURL(uRL);
 		this.setTags(tags);
 	}
 
-	public static String getUrl() {
-		return url;
+	public int getId() {
+		return Id;
 	}
 
-	public void setUrl(String url) {
-		Video.url = url;
+	public void setId(int id) {
+		Id = id;
 	}
 
-	public static String getTitle() {
-		return title;
+	public String getTitle() {
+		return Title;
 	}
 
 	public void setTitle(String title) {
-		Video.title = title;
+		Title = title;
 	}
-	public static String getTags() {
+
+	public String getURL() {
+		return URL;
+	}
+
+	public void setURL(String uRL) {
+		URL = uRL;
+	}
+
+	public String getTags() {
 		return tags;
 	}
 
 	public void setTags(String tags) {
-		Video.tags = tags;
+		this.tags = tags;
 	}
-	
-	@Override
-    public String toString() {
-        return "Title: "+ Video.getTitle() + "\n URL: " + Video.getUrl() + "\n Tag List: " + Video.getTags();
-    }
 
+	@Override
+	public String toString() {
+		return "Video [Id=" + Id + ", Title=" + Title + ", URL=" + URL + ", tags=" + tags + "]";
+	}
 }

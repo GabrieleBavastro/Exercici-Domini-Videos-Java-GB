@@ -1,70 +1,77 @@
 package com.video.project;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class User {
-
-	private static String name;
-	private String surname;
-	private static String userName;
-	private static String pswd;
-	private static LocalDate dateOfSignUp;
-	static List<Video> videos = new ArrayList<Video>();
 	
-
-	public User(String name, String surname, String pswd, LocalDate dateOfSignUp, String userName) throws Exception {
+	private static int ID_COUNTER = 1; 
+	
+	private int Id;
+	private String Name;
+	private String Surname;
+	private String Password ="";
+	private Date registerDate;
+	List<Video> videoList;
 		
+	public User(String name, String surname, String password) throws Exception {
 		
 		if(name.equals(""))
-			throw new Exception("Please introduce the requested data without blank spaces.");
+			throw new Exception("Name field not filled! Please fill it in!");
 		if(surname.equals(""))
-			throw new Exception("Please introduce the requested data without blank spaces.");
-		if(pswd.equals(""))
-			throw new Exception("Please introduce the requested data without blank spaces.");
+			throw new Exception("Surname field not filled! Please fill it in!");
+		if(password.equals(""))
+			throw new Exception("Password field not filled! Please fill it in!");
 		
+		Id = ID_COUNTER;
+		ID_COUNTER++;
+
 		this.setName(name);
-		this.setSurname(surname);
-		this.setPswd(pswd);
-		this.setDateOfSignUp(LocalDate.now());
-		this.setUserName(name + "." + surname);
-	}
+		this.setSurname(surname); 
+		this.setPassword(password);
+		this.setRegisterDate(new Date());
 		
-	public static String getName() {
-		return name;
+		this.videoList = new ArrayList<Video>();
+		
+	}
+
+
+	public int getId() {
+		return Id;
+	}
+
+
+	public void setId(int id) {
+		Id = id;
+	}
+
+
+	public String getName() {
+		return Name;
 	}
 
 
 	public void setName(String name) {
-		User.name = name;
+		Name = name;
 	}
 
 
 	public String getSurname() {
-		return surname;
+		return Surname;
 	}
 
 
 	public void setSurname(String surname) {
-		this.surname = surname;
+		Surname = surname;
 	}
 
 
-	public static String getUserName() {
-		return userName;
-	}
-
-
-	public void setUserName(String userName) {
-		User.userName = userName;
-	}
-
-	public static String getPswd() {
+	public String getPassword() {
 		
 		String hiddenPassword="";
 				
-		for (int i = 0; i < pswd.length(); i++) {
+		for (int i = 0; i < Password.length(); i++) {
 			hiddenPassword+="*";
 		}
 		
@@ -73,25 +80,49 @@ public class User {
 		return hiddenPassword;
 	}
 
-	public void setPswd(String pswd) {
-		User.pswd = pswd;
+
+	public void setPassword(String password) {
+		Password = password;
 	}
 
 
-	public static LocalDate getDateOfSignUp() {
-		return dateOfSignUp;
+	public Date getRegisterDate() {
+		return registerDate;
 	}
 
 
-	public void setDateOfSignUp(LocalDate dateOfSignUp) {
-		User.dateOfSignUp = dateOfSignUp;
+	public void setRegisterDate(Date registerDate) {
+		this.registerDate = registerDate;
 	}
 	
-	public List<Video> getVideo() {
-		return videos;
+	public List<Video> getVideoList() {
+		return videoList;
 	}
 
-	public void setVideo(List<Video> videos) {
-		User.videos = videos;
+
+	public void setVideoList(List<Video> videoList) {
+		this.videoList = videoList;
+	}
+
+	public void addVideo(Video newVideo) {
+		this.getVideoList().add(newVideo);
+	}
+	
+	public void addVideos(List<Video> newVideo) {
+
+		for (Video video : newVideo) {
+			this.getVideoList().add(video);
+		}
+	}
+	
+	public boolean CheckPassword(String pwd) {
+		return (this.Password.equals(pwd));
+	}
+
+
+	@Override
+	public String toString() {
+		return "User [Id=" + Id + ", Name=" + Name + ", Surname=" + Surname + ", Password=" + getPassword()
+				+ ", registerDate=" + registerDate + ", videoList=" + videoList + "]";
 	}
 }
